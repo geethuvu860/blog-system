@@ -14,7 +14,7 @@
         <div class="col-md-5">
             <div class="card shadow">
                 <div class="card-header text-center" class="">
-                    <h4>Login</h4>
+                    <h4>Login & Registration form</h4>
                 </div>
 
                 <div class="card-body">
@@ -50,9 +50,11 @@
 
                        
 
-                        <button type="submit" class="btn btn-primary w-100">
+                        <button type="submit" class="btn btn-primary sm-3" >
                             Login
                         </button>
+                        <a href="{{ route('register') }}" class="btn btn-secondary sm-3">Register</a>
+                       
                     </form>
 
                 </div>

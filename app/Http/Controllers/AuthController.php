@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\User_role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+
 
 class AuthController extends Controller
 {
@@ -40,9 +42,34 @@ class AuthController extends Controller
       
         
     }
+    function showregister()
+    {       $user_roles=User_role::all();
+    // $user_roles=
+            return view('auth.register',compact('user_roles'));
+    }
+    function register(Request $request)
+    {
+            $request->validate([
+                'name'=>'required',
+                'user_name'=>'required',
+                'password'=>'required',
+                'email'=>'required',
+                'role_id'=>'required',
+            ]);
+            
+            User::create([
+                'name'=>$request->name,
+                'email'=>$request->email,
+                'user_name'=>$request->user_name,
+                'password' => Hash::make($request->password),
+                'role_id'=>$request->role_id,
+            ]);
+            return redirect()->route('loginIn')->with('success','Registration Successfull');
+    }
+
 
     function dashboard(){
-        // dd('hello');die;
+       
         return view('dashboard.dashboard');
     }
 
@@ -50,4 +77,6 @@ class AuthController extends Controller
         $request->session()->invalidate();
         return redirect()->route('loginIn');
     }
+    
+    
 }

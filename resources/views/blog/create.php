@@ -1,6 +1,6 @@
 
- @include('layout.header')
-  @include('layout.sidebar')
+@include('layout.header')
+@include('layout.sidebar')
 
   <!-- Main Content -->
   <main>
@@ -20,3 +20,6 @@
             </div>
           </div>
         </div>
+
+
+          

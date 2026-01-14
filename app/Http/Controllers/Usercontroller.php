@@ -3,21 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\User_role;
 use Illuminate\Http\Request;
 
 class Usercontroller extends Controller
 {
     function list(){
-        $condi=array('role_id'=>2);
-        $record=User::where();
-        $data['records']=$record;
-        $data['title']='User List';
-        return view('users.list', $data);
-    }//func
+        
+        $users=User::where('role_id',2)->get();
+        return view('users.list',compact('users'));
+    }
 
     function create(){
         return view('users.create');
-    }   
+    }  
+     
 
     function store(Request $request){
         $request->validate([
@@ -46,19 +46,36 @@ class Usercontroller extends Controller
         return redirect()->route('users.list')->with('success','User created successfully.');
        }
     }   
-
-    function edit($id){
-        $data['user']=User::where('user_id', $id)->first();
-        return view('users.edit', $data);
+    //edit the registration form 
+    function edit($user_id)
+    {
+   
+        $user = User::with('role')->findOrFail($user_id);
+        $user_roles = User_role::all();
+        return view('users.edit',compact('user','user_roles'));  
     }   
-
-    function update(Request $request, $id){
-        
+    //update the registration form
+    function update(Request $request, $user_id)
+    {
+        $request->validate([
+            'name'=>'required|string|max:255',
+            'user_name'=>'required|string|max:255',
+            'email'=>'required|email',
+            'role_id'=>'required'
+        ]);
+        $user=User::findorfail($user_id);
+        $user->update([
+        'name' => $request->name,
+        'user_name' => $request->name,
+        'email' => $request->email,
+        'role_id' => $request->role_id,
+    ]);
         return redirect()->route('users.list')->with('success','User updated successfully.');
     }
-
-    function delete($id){
-        User::where('user_id', $id)->delete();
+    //delete the users
+    function delete($user_id)
+    {
+        User::where('user_id', $user_id)->delete();
         return redirect()->route('users.list')->with('success','User deleted successfully.');
     }   
 }
